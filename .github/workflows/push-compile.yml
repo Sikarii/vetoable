@@ -1,0 +1,35 @@
+name: Compile
+
+on:
+  push:
+    branches:
+     - "**"
+    tags-ignore:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup SourcePawn Compiler
+      id: setup
+      uses: rumblefrog/setup-sp@v1.0.1
+      with: 
+          version: '1.10.x'
+
+    - name: Create plugins directory
+      run: mkdir addons/sourcemod/plugins
+
+    - name: Compile plugins
+      run: |
+        cd addons/sourcemod/scripting
+        for file in *.sp; do spcomp $file -i "include" -o "../plugins/${file%.*}.smx"; done;
+
+    - name: Upload compiled plugin
+      uses: actions/upload-artifact@v2
+      with:
+        name: Compiled plugin with SP ${{ steps.setup.outputs.version }}
+        path: addons/sourcemod/plugins/*.smx

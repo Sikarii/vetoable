@@ -1,0 +1,43 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+    - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup variables
+      id: vars
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+    - name: Setup SourcePawn Compiler
+      id: setup
+      uses: rumblefrog/setup-sp@v1.0.1
+      with: 
+          version: "1.10.x"
+
+    - name: Create plugins directory
+      run: mkdir addons/sourcemod/plugins
+
+    - name: Compile plugins
+      run: |
+        cd addons/sourcemod/scripting
+        for file in *.sp; do spcomp $file -i "include" -o "../plugins/${file%.*}.smx"; done;
+
+    - name: Compress plugins
+      run : |
+        mkdir artifact
+        zip -r "artifact/vetoable-${{ steps.vars.outputs.tag }}.zip" addons cfg
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: "artifact/vetoable-${{ steps.vars.outputs.tag }}.zip"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
