@@ -43,10 +43,10 @@ Each preset in the file follows the format:
     }
     "actions"
     {
-        "pick"    "1"
-        "ban"     "2"
-        "random"  "0"
-        "decider" "0"
+        "pick"      "1"
+        "ban"       "2"
+        "pick"      "0"
+        "decider"   "0"
     }
 }
 ```

@@ -9,8 +9,6 @@ enum VetoActionType
 {    
     VetoActionType_Pick = 0,
     VetoActionType_Ban,
-    VetoActionType_Random,
-    VetoActionType_Decider,
     VetoActionType_COUNT
 };
 
@@ -31,8 +29,6 @@ stock char VetoActionPhrases[VetoActionType_COUNT][] =
 {
     "pick",
     "ban",
-    "random",
-    "decider"
 };
 
 stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] =

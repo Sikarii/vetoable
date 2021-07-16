@@ -85,13 +85,6 @@ bool VetoProceed(int vetoId, int chosenItemIndex)
 	VetoAction action;
 	veto.Actions.GetArray(veto.Cursor, action);
 
-	// Last random is "decider"
-	if (action.Type == VetoActionType_Random
-		&& veto.RemainingItems.Length == 1)
-	{
-		action.Type = VetoActionType_Decider;
-	}
-
 	VetoItem item;
 	veto.RemainingItems.GetArray(chosenItemIndex, item);
 
@@ -206,20 +199,9 @@ bool VetoAddAction(int vetoId, VetoActionType type, int voterNum)
 		return false;
 	}
 
-	// Deciders cannot be set explicitly
-	if (type == VetoActionType_Decider)
-	{
-		return false;
-	}
-
 	VetoAction action;
 	action.Type = type;
 	action.VoterNum = voterNum;
-
-	if (type == VetoActionType_Random)
-	{
-		action.VoterNum = 0;
-	}
 
 	bool valid = action.Validate();
 	if (!valid)
