@@ -57,7 +57,10 @@ Each preset in the file follows the format:
 
 ##### Vetoable exposes a [Plugin API](/addons/sourcemod/scripting/include/vetoable.inc) for interacting with vetos
 
-Extending can be as simple as announcing results (see [announcer-chat](/addons/sourcemod/scripting/vetoable-announcer-chat.sp) and [announcer-winpanel](/addons/sourcemod/scripting/vetoable-announcer-chat.sp) to providing alternative ways of creating vetos.
+Examples could be:
+
+- Providing alternative ways of creating and starting vetos
+- Announcing results (see [announcer-chat](/addons/sourcemod/scripting/vetoable-announcer-chat.sp) and [announcer-winpanel](/addons/sourcemod/scripting/vetoable-announcer-chat.sp))
 
 Example plugin:
 
