@@ -26,8 +26,8 @@ A flexible SourceMod plugin for organizing vetos.
 
 - The preset name will be used in the `sm_veto` command
 - Presets can define as many items and actions as they want
-- Action type must be either `ban`, `pick`, `decider` or `random`
-- Actions with voter number as `0` are considered non-interactable and will be chosen by random
+- Action type must be either `ban` or `pick`
+- Action with voter as `0` is considered non-interactable and will be chosen by random
 
 Each preset in the file follows the format:
 
@@ -40,13 +40,15 @@ Each preset in the file follows the format:
         "item2"    "Item 2"
         "item3"    "Item 3"
         "item4"    "Item 4"
+        "item5"    "Item 5"
     }
     "actions"
     {
         "pick"      "1"
+        "pick"      "2"
+        "ban"       "1"
         "ban"       "2"
         "pick"      "0"
-        "decider"   "0"
     }
 }
 ```
