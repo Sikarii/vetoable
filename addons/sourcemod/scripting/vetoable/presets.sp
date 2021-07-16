@@ -86,11 +86,6 @@ static ArrayList ParseActions(KeyValues kv)
 		action.Type = StringToVetoType(typeStr);
 		action.VoterNum = StringToInt(voterStr);
 
-		if (action.Type == VetoActionType_Decider)
-		{
-			action.Type = VetoActionType_Random;
-		}
-
 		actions.PushArray(action);
 	}
 
@@ -107,5 +102,5 @@ static VetoActionType StringToVetoType(char[] input)
 		}
 	}
 
-	return VetoActionType_Random;
+	return VetoActionType_Pick;
 }

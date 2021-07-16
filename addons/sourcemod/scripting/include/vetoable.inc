@@ -9,8 +9,6 @@ enum VetoActionType
 {    
     VetoActionType_Pick = 0,
     VetoActionType_Ban,
-    VetoActionType_Random,
-    VetoActionType_Decider,
     VetoActionType_COUNT
 };
 
@@ -31,8 +29,6 @@ stock char VetoActionPhrases[VetoActionType_COUNT][] =
 {
     "pick",
     "ban",
-    "random",
-    "decider"
 };
 
 stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] =
@@ -82,7 +78,7 @@ methodmap VetoableVeto
      * Adds an item to the veto.
      *
      * @param name            Name of the item to add.
-     * @param value            Value fo the item to add.
+     * @param value            Value of the item to add.
      * @return                Whether the item was successfully added.
      */
     public native bool AddItem(const char[] name, const char[] value = "");
@@ -161,7 +157,7 @@ methodmap VetoableVeto
     /**
      * Gets count of actions in the veto.
      *
-     * @return                Count actions in the veto or -1 on failure.
+     * @return                Count of actions in the veto or -1 on failure.
      */
     property int ActionCount
     {
@@ -181,7 +177,7 @@ methodmap VetoableVeto
     /**
      * Gets count of remaining items in the veto.
      *
-     * @return                Count of items in the veto or -1 on failure.
+     * @return                Count of remaining items in the veto or -1 on failure.
      */
     property int RemainingItemCount
     {

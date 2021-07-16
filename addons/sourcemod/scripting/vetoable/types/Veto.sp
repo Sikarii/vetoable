@@ -25,7 +25,7 @@ enum struct Veto
 				maxVoterNum = action.VoterNum;
 			}
 		}
-		
+
 		return maxVoterNum;
 	}
 

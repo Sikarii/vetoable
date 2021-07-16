@@ -27,12 +27,12 @@ public void Vetoable_OnVetoStarted(VetoableVeto veto)
 		<span class='fontSize-l'>%N</span>\
 		<span class='fontSize-xl' color='#FFA500'> vs </span>\
 		<span class='fontSize-l'>%N</span>\
-		<br><br><br>",
-	panelHtml,
-	veto.Id,
-	name,
-	player1,
-	player2);
+		<br><br>",
+		panelHtml,
+		veto.Id,
+		name,
+		player1 != -1 ? player1 : 0,
+		player2 != -1 ? player2 : 0);
 
 	activeVetoId = veto.Id;
 	ShowWinPanel(panelHtml);
@@ -42,7 +42,9 @@ public void Vetoable_OnVetoAction(VetoableVeto veto, int voter, VetoActionType t
 {
 	if (veto.Id == activeVetoId)
 	{
-		PushNewResultItem(voter, type, name);
+		PushNewResultItem(veto, voter, type, name);
+		StrCat(panelHtml, sizeof(panelHtml), "<br>");
+
 		ShowWinPanel(panelHtml);
 	}
 }
@@ -73,47 +75,38 @@ void ShowWinPanel(const char[] message)
 	event.Fire();
 }
 
-static void PushNewResultItem(int voter, VetoActionType type, const char[] name)
+static int PushNewResultItem(VetoableVeto veto, int voter, VetoActionType type, const char[] name)
 {
-	switch (type)
+	if (type == VetoActionType_Ban)
 	{
-		case VetoActionType_Ban:
-		{
-			Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontsize-l'>%N</span>\
-				<span color='#C80000'> banned </span>\
-				<span class='fontsize-m'>%s</span>",
+		return Format(panelHtml, sizeof(panelHtml), "%s\
+			<span class='fontsize-l'>%N</span>\
+			<span color='#C80000'> banned </span>\
+			<span class='fontsize-m'>%s</span>",
 			panelHtml,
 			voter,
 			name);
-		}
-		case VetoActionType_Pick:
+	}
+
+	if (type == VetoActionType_Pick)
+	{
+		if (voter == 0 && veto.RemainingItemCount == 0)
 		{
-			Format(panelHtml, sizeof(panelHtml), "%s\
+			return Format(panelHtml, sizeof(panelHtml), "%s\
+				<span class='fontsize-m'>%s</span> is \
+				the <span color='#C8C800'>decider</span>",
+				panelHtml,
+				name);
+		}
+
+		return Format(panelHtml, sizeof(panelHtml), "%s\
 				<span class='fontsize-l'>%N</span>\
 				<span color='#00C800'> picked </span>\
 				<span class='fontsize-m'>%s</span>",
-			panelHtml,
-			voter,
-			name);
-		}
-		case VetoActionType_Random:
-		{
-			Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontsize-m'>%s</span> was \
-				<span color='#C8C800'>randomly selected</span>",
-			panelHtml,
-			name);
-		}
-		case VetoActionType_Decider:
-		{
-			Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontsize-m'>%s</span> is \
-				the <span color='#C8C800'>decider</span>",
-			panelHtml,
-			name);
-		}
+				panelHtml,
+				voter,
+				name);
 	}
 
-	StrCat(panelHtml, sizeof(panelHtml), "<br>");
+	return -1;
 }

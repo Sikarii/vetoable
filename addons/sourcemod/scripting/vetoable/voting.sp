@@ -29,15 +29,13 @@ bool AskForInput(Veto veto)
 	VetoAction action;
 	veto.Actions.GetArray(veto.Cursor, action);
 
-	int voter = action.VoterNum == 0
-				? 0
-				: veto.Participants.Get(action.VoterNum - 1);
-
-	if (voter == 0 || action.Type == VetoActionType_Random)
+	if (action.VoterNum == 0)
 	{
 		int rndIdx = GetRandomInt(0, veto.RemainingItems.Length - 1);
 		return VetoProceed(veto.Id, rndIdx);
 	}
+
+	int voter = veto.Participants.Get(action.VoterNum - 1);
 
 	ShowVoterMenu(veto, voter, action.Type);
 	return true;
