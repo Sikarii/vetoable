@@ -35,7 +35,7 @@ stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] =
 {
     "canceled",
     "finished",
-    "abandoned"
+    "abandoned",
 };
 
 // =====[ METHODMAP ]=====
@@ -303,7 +303,7 @@ native bool Vetoable_IsClientInVeto(int client, int &inVetoId = -1);
 
 /**
  * Adds actions to a veto from a string.
- * Example input: P1,P2,B1,B2,P1,P2,R
+ * Example input: P1,P2,B1,B2,P1,P2,P0
  *
  * @param veto            Veto to add to.
  * @param input            Input string, see above example.
@@ -322,11 +322,7 @@ stock int Vetoable_AddActionsFromString(VetoableVeto veto, char[] input, char[] 
         char typeChar = actions[i][0];
         int voterNum = StringToInt(actions[i][1]);
 
-        VetoActionType type = typeChar == 'P'
-                                ? VetoActionType_Pick
-                                : typeChar == 'B'
-                                ? VetoActionType_Ban
-                                : VetoActionType_Random;
+        VetoActionType type = typeChar == 'B' ? VetoActionType_Ban : VetoActionType_Pick;
 
         bool added = veto.AddAction(type, voterNum);
         if (added)
