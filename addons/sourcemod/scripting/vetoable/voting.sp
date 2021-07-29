@@ -1,27 +1,3 @@
-static StringMap VetoMenus = null;
-
-// =====[ LISTENERS ]=====
-
-void OnPluginStart_Voting()
-{
-	VetoMenus = new StringMap();
-}
-
-void Vetoable_OnVetoEnded_Voting(int vetoId)
-{
-	char szId[16];
-	IntToString(vetoId, szId, sizeof(szId));
-
-	Menu vetoMenu = null;
-	VetoMenus.GetValue(szId, vetoMenu);
-
-	if (vetoMenu != null)
-	{
-		delete vetoMenu;
-		VetoMenus.Remove(szId);	
-	}
-}
-
 // =====[ PUBLIC ]=====
 
 bool AskForInput(Veto veto)
@@ -43,26 +19,9 @@ bool AskForInput(Veto veto)
 
 // =====[ PRIVATE ]=====
 
-static Menu GetOrCreateVetoMenu(Veto veto)
-{
-	char szId[16];
-	IntToString(veto.Id, szId, sizeof(szId));
-
-	Menu vetoMenu = null;
-	VetoMenus.GetValue(szId, vetoMenu);
-
-	if (vetoMenu == null)
-	{
-		vetoMenu = new Menu(MenuHandler_Voting);
-		VetoMenus.SetValue(szId, vetoMenu);
-	}
-
-	return vetoMenu;
-}
-
 static void ShowVoterMenu(Veto veto, int voter, VetoActionType type)
 {
-	Menu vetoMenu = GetOrCreateVetoMenu(veto);
+	Menu vetoMenu = new Menu(MenuHandler_Voting);
 
 	vetoMenu.RemoveAllItems();
 	vetoMenu.SetTitle("[Veto] It's your time to %s!", VetoActionPhrases[type]);
@@ -90,31 +49,33 @@ static void ShowVoterMenu(Veto veto, int voter, VetoActionType type)
 
 public int MenuHandler_Voting(Menu menu, MenuAction action, int param1, int param2)
 {
-	if (action == MenuAction_End)
+	if (action == MenuAction_Select || action == MenuAction_Cancel)
 	{
-		return;
+		char szId[16];
+		menu.GetItem(0, szId, sizeof(szId));
+
+		int vetoId = StringToInt(szId);
+	
+		Veto veto;
+		bool exists = GetVetoById(vetoId, veto);
+	
+		if (!exists)
+		{
+			return;
+		}
+	
+		VetoAction vetoAction;
+		veto.Actions.GetArray(veto.Cursor, vetoAction);
+	
+		// Random selection if user does not interact
+		int itemIndex = action == MenuAction_Select
+			? param2 - 1
+			: GetRandomInt(0, veto.RemainingItems.Length - 1);
+	
+		VetoProceed(vetoId, itemIndex);
 	}
-
-	char szId[16];
-	menu.GetItem(0, szId, sizeof(szId));
-
-	int vetoId = StringToInt(szId);
-
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
-
-	if (!exists)
+	else if (action == MenuAction_End)
 	{
-		return;
+		delete menu;
 	}
-
-	VetoAction vetoAction;
-	veto.Actions.GetArray(veto.Cursor, vetoAction);
-
-	// Random selection if user does not interact
-	int itemIndex = action == MenuAction_Select
-		? param2 - 1
-		: GetRandomInt(0, veto.RemainingItems.Length - 1);
-
-	VetoProceed(vetoId, itemIndex);
 }
