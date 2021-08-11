@@ -71,7 +71,7 @@ public int MenuHandler_Voting(Menu menu, MenuAction action, int param1, int para
 		int itemIndex = action == MenuAction_Select
 			? param2 - 1
 			: GetRandomInt(0, veto.RemainingItems.Length - 1);
-	
+
 		VetoProceed(vetoId, itemIndex);
 	}
 	else if (action == MenuAction_End)
