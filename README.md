@@ -60,7 +60,9 @@ Each preset in the file follows the format:
 Examples could be:
 
 - Providing alternative ways of creating and starting vetos
-- Announcing results (see [announcer-chat](/addons/sourcemod/scripting/vetoable-announcer-chat.sp) and [announcer-winpanel](/addons/sourcemod/scripting/vetoable-announcer-chat.sp))
+- Announcing results (see following for examples)
+  - [vetoable-announcer-chat](/addons/sourcemod/scripting/vetoable-announcer-chat.sp)
+  - [vetoable-announcer-winpanel](/addons/sourcemod/scripting/vetoable-announcer-winpanel.sp)
 
 Example plugin:
 
@@ -82,7 +84,7 @@ public Action Command_VetoRandom(int client, int args)
     veto.AddAction(VetoActionType_Pick, 0);
     veto.AddAction(VetoActionType_Pick, 0);
 
-    // Add 9 random items
+    // Add 9 items
     veto.AddItem("Item 1");
     veto.AddItem("Item 2");
     veto.AddItem("Item 3");
