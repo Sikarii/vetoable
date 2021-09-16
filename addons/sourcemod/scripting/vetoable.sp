@@ -20,7 +20,7 @@ public Plugin myinfo =
 	name = "Vetoable",
 	author = "Sikari",
 	description = "",
-	version = "1.1.1",
+	version = "1.1.2",
 	url = "https://github.com/Sikarii/vetoable"
 };
 
@@ -35,7 +35,6 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	OnPluginStart_Vetos();
-	OnPluginStart_Voting();
 	OnPluginStart_Presets();
 	OnPluginStart_Convars();
 	OnPluginStart_Commands();
@@ -53,9 +52,4 @@ public void OnClientDisconnect(int client)
 	{
 		VetoEnd(existingVetoId, VetoEndReason_Abandoned);
 	}
-}
-
-public void Vetoable_OnVetoEnded(VetoableVeto veto, VetoEndReason reason)
-{
-	Vetoable_OnVetoEnded_Voting(veto.Id);
 }

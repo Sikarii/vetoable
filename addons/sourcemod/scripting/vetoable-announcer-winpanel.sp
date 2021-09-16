@@ -22,7 +22,7 @@ public void Vetoable_OnVetoStarted(VetoableVeto veto)
 
 	Format(panelHtml, sizeof(panelHtml), "%s\
 		<br>\
-		<span class='fontsize-m'>Veto #%d (%s)</span>\
+		<span class='fontSize-m'>Veto #%d (%s)</span>\
 		<br><br>\
 		<span class='fontSize-l'>%N</span>\
 		<span class='fontSize-xl' color='#FFA500'> vs </span>\
@@ -80,12 +80,12 @@ static int PushNewResultItem(VetoableVeto veto, int voter, VetoActionType type, 
 	if (type == VetoActionType_Ban)
 	{
 		return Format(panelHtml, sizeof(panelHtml), "%s\
-			<span class='fontsize-l'>%N</span>\
-			<span color='#C80000'> banned </span>\
-			<span class='fontsize-m'>%s</span>",
-			panelHtml,
-			voter,
-			name);
+				<span class='fontSize-m'>%N</span>\
+				<span color='#C80000'> banned </span>\
+				<span class='fontSize-m'>%s</span>",
+				panelHtml,
+				voter,
+				name);
 	}
 
 	if (type == VetoActionType_Pick)
@@ -93,16 +93,16 @@ static int PushNewResultItem(VetoableVeto veto, int voter, VetoActionType type, 
 		if (voter == 0 && veto.RemainingItemCount == 0)
 		{
 			return Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontsize-m'>%s</span> is \
+				<span class='fontSize-m'>%s</span> is \
 				the <span color='#C8C800'>decider</span>",
 				panelHtml,
 				name);
 		}
 
 		return Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontsize-l'>%N</span>\
+				<span class='fontSize-m'>%N</span>\
 				<span color='#00C800'> picked </span>\
-				<span class='fontsize-m'>%s</span>",
+				<span class='fontSize-m'>%s</span>",
 				panelHtml,
 				voter,
 				name);

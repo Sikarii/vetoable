@@ -103,7 +103,7 @@ bool VetoProceed(int vetoId, int chosenItemIndex)
 	if (!needMore)
 	{
 		VetoEnd(vetoId, VetoEndReason_Finished);
-		return false;
+		return true;
 	}
 
 	veto.Cursor++;
