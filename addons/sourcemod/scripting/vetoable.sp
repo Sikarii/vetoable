@@ -20,7 +20,7 @@ public Plugin myinfo =
 	name = "Vetoable",
 	author = "Sikari",
 	description = "",
-	version = "1.1.1",
+	version = "1.1.2",
 	url = "https://github.com/Sikarii/vetoable"
 };
 
