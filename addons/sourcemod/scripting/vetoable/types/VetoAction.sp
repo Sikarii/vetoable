@@ -1,15 +1,15 @@
 enum struct VetoAction
 {
-	int VoterNum;
-	VetoActionType Type;
+    int VoterNum;
+    VetoActionType Type;
 
-	bool Validate()
-	{
-		if (this.VoterNum < 0)
-		{
-			return false;
-		}
+    bool Validate()
+    {
+        if (this.VoterNum < 0)
+        {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

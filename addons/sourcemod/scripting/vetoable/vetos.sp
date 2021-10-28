@@ -5,264 +5,264 @@ static StringMap VetoMap = null;
 
 void OnPluginStart_Vetos()
 {
-	VetoMap = new StringMap();
+    VetoMap = new StringMap();
 }
 
 // =====[ PUBLIC ]=====
 
 int VetoCreate(char name[sizeof(Veto::Name)])
 {
-	Veto veto;
-	veto.Id = UniqueId++;
+    Veto veto;
+    veto.Id = UniqueId++;
 
-	veto.Name = name;
+    veto.Name = name;
 
-	veto.Items = new ArrayList(sizeof(VetoItem));
-	veto.Actions = new ArrayList(sizeof(VetoAction));
-	veto.Participants = new ArrayList();
+    veto.Items = new ArrayList(sizeof(VetoItem));
+    veto.Actions = new ArrayList(sizeof(VetoAction));
+    veto.Participants = new ArrayList();
 
-	VetoSetById(veto.Id, veto);
-	return veto.Id;
+    VetoSetById(veto.Id, veto);
+    return veto.Id;
 }
 
 bool VetoStart(int vetoId)
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists || veto.IsStarted)
-	{
-		return false;
-	}
+    if (!exists || veto.IsStarted)
+    {
+        return false;
+    }
 
-	bool valid = veto.Validate();
-	if (!valid)
-	{
-		return false;
-	}
+    bool valid = veto.Validate();
+    if (!valid)
+    {
+        return false;
+    }
 
-	veto.IsStarted = true;
-	veto.RemainingItems = veto.Items.Clone();
+    veto.IsStarted = true;
+    veto.RemainingItems = veto.Items.Clone();
 
-	VetoSetById(vetoId, veto);
-	Call_OnVetoStarted(vetoId);
+    VetoSetById(vetoId, veto);
+    Call_OnVetoStarted(vetoId);
 
-	return AskForInput(veto);
+    return AskForInput(veto);
 }
 
 bool VetoEnd(int vetoId, VetoEndReason reason)
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists)
-	{
-		return false;
-	}
+    if (!exists)
+    {
+        return false;
+    }
 
-	VetoRemove(veto);
+    VetoRemove(veto);
 
-	// Dont dispatch finished if it was never started
-	if (reason == VetoEndReason_Finished && !veto.IsStarted)
-	{
-		return true;
-	}
+    // Dont dispatch finished if it was never started
+    if (reason == VetoEndReason_Finished && !veto.IsStarted)
+    {
+        return true;
+    }
 
-	Call_OnVetoEnded(vetoId, reason);
-	return true;
+    Call_OnVetoEnded(vetoId, reason);
+    return true;
 }
 
 bool VetoProceed(int vetoId, int chosenItemIndex)
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists)
-	{
-		return false;
-	}
+    if (!exists)
+    {
+        return false;
+    }
 
-	VetoAction action;
-	veto.Actions.GetArray(veto.Cursor, action);
+    VetoAction action;
+    veto.Actions.GetArray(veto.Cursor, action);
 
-	VetoItem item;
-	veto.RemainingItems.GetArray(chosenItemIndex, item);
+    VetoItem item;
+    veto.RemainingItems.GetArray(chosenItemIndex, item);
 
-	veto.RemainingItems.Erase(chosenItemIndex);
+    veto.RemainingItems.Erase(chosenItemIndex);
 
-	// Save this now, so plugins can retrieve up-to-date information in the global forward.
-	VetoSetById(vetoId, veto);
+    // Save this now, so plugins can retrieve up-to-date information in the global forward.
+    VetoSetById(vetoId, veto);
 
-	int voter = action.VoterNum == 0
-        ? 0
-        : veto.Participants.Get(action.VoterNum - 1);
+    int voter = action.VoterNum == 0
+     ? 0
+     : veto.Participants.Get(action.VoterNum - 1);
 
-	Call_OnVetoAction(vetoId, voter, action.Type, item.Name, item.Value);
+    Call_OnVetoAction(vetoId, voter, action.Type, item.Name, item.Value);
 
-	bool needMore = veto.Cursor < veto.Actions.Length - 1;
-	if (!needMore)
-	{
-		VetoEnd(vetoId, VetoEndReason_Finished);
-		return true;
-	}
+    bool needMore = veto.Cursor < veto.Actions.Length - 1;
+    if (!needMore)
+    {
+        VetoEnd(vetoId, VetoEndReason_Finished);
+        return true;
+    }
 
-	veto.Cursor++;
-	VetoSetById(vetoId, veto);
+    veto.Cursor++;
+    VetoSetById(vetoId, veto);
 
-	return AskForInput(veto);
+    return AskForInput(veto);
 }
 
 ArrayList GetVetos()
 {
-	StringMapSnapshot keys = VetoMap.Snapshot();
-	ArrayList vetos = new ArrayList(sizeof(Veto));
+    StringMapSnapshot keys = VetoMap.Snapshot();
+    ArrayList vetos = new ArrayList(sizeof(Veto));
 
-	for (int i = 0; i < keys.Length; i++)
-	{
-		char key[16];
-		keys.GetKey(i, key, sizeof(key));
+    for (int i = 0; i < keys.Length; i++)
+    {
+        char key[16];
+        keys.GetKey(i, key, sizeof(key));
 
-		Veto veto;
-		VetoMap.GetArray(key, veto, sizeof(veto));
+        Veto veto;
+        VetoMap.GetArray(key, veto, sizeof(veto));
 
-		vetos.PushArray(veto);
-	}
+        vetos.PushArray(veto);
+    }
 
-	delete keys;
-	return vetos;
+    delete keys;
+    return vetos;
 }
 
 bool GetVetoById(int id, Veto veto)
 {
-	char key[16];
-	IntToString(id, key, sizeof(key));
-	return VetoMap.GetArray(key, veto, sizeof(veto));
+    char key[16];
+    IntToString(id, key, sizeof(key));
+    return VetoMap.GetArray(key, veto, sizeof(veto));
 }
 
 int GetParticipantExistingVeto(int client)
 {
-	ArrayList vetos = GetVetos();
+    ArrayList vetos = GetVetos();
 
-	for (int i = 0; i < vetos.Length; i++)
-	{
-		Veto veto;
-		vetos.GetArray(i, veto);
+    for (int i = 0; i < vetos.Length; i++)
+    {
+        Veto veto;
+        vetos.GetArray(i, veto);
 
-		if (veto.Participants.FindValue(client) != -1)
-		{
-			delete vetos;
-			return veto.Id;
-		}
-	}
+        if (veto.Participants.FindValue(client) != -1)
+        {
+            delete vetos;
+            return veto.Id;
+        }
+    }
 
-	delete vetos;
-	return -1;
+    delete vetos;
+    return -1;
 }
 
 bool VetoAddItem(int vetoId, char name[sizeof(VetoItem::Name)], char value[sizeof(VetoItem::Value)])
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists || veto.IsStarted)
-	{
-		return false;
-	}
+    if (!exists || veto.IsStarted)
+    {
+        return false;
+    }
 
-	VetoItem item;
-	item.Name = name;
-	item.Value = value;
+    VetoItem item;
+    item.Name = name;
+    item.Value = value;
 
-	bool valid = item.Validate();
-	if (!valid)
-	{
-		return false;
-	}
+    bool valid = item.Validate();
+    if (!valid)
+    {
+        return false;
+    }
 
-	// Fill value with name if not set
-	if (StrEqual(item.Value, ""))
-	{
-		item.Value = item.Name;
-	}
+    // Fill value with name if not set
+    if (StrEqual(item.Value, ""))
+    {
+        item.Value = item.Name;
+    }
 
-	veto.Items.PushArray(item);
-	return VetoSetById(vetoId, veto);
+    veto.Items.PushArray(item);
+    return VetoSetById(vetoId, veto);
 }
 
 bool VetoAddAction(int vetoId, VetoActionType type, int voterNum)
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists || veto.IsStarted)
-	{
-		return false;
-	}
+    if (!exists || veto.IsStarted)
+    {
+        return false;
+    }
 
-	VetoAction action;
-	action.Type = type;
-	action.VoterNum = voterNum;
+    VetoAction action;
+    action.Type = type;
+    action.VoterNum = voterNum;
 
-	bool valid = action.Validate();
-	if (!valid)
-	{
-		return false;
-	}
+    bool valid = action.Validate();
+    if (!valid)
+    {
+        return false;
+    }
 
-	veto.Actions.PushArray(action);
-	return VetoSetById(vetoId, veto);
+    veto.Actions.PushArray(action);
+    return VetoSetById(vetoId, veto);
 }
 
 bool VetoAddParticipant(int vetoId, int client)
 {
-	Veto veto;
-	bool exists = GetVetoById(vetoId, veto);
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
 
-	if (!exists || veto.IsStarted)
-	{
-		return false;
-	}
+    if (!exists || veto.IsStarted)
+    {
+        return false;
+    }
 
-	#if !defined DEBUG
-	if (client <= 0 || client > MaxClients)
-	{
-		return false;
-	}
+    #if !defined DEBUG
+    if (client <= 0 || client > MaxClients)
+    {
+        return false;
+    }
 
-	if (!IsClientConnected(client))
-	{
-		return false;
-	}
+    if (!IsClientConnected(client))
+    {
+        return false;
+    }
 
-	// Already in a veto
-	if (GetParticipantExistingVeto(client) != -1)
-	{
-		return false;
-	}
-	#endif
+    // Already in a veto
+    if (GetParticipantExistingVeto(client) != -1)
+    {
+        return false;
+    }
+    #endif
 
-	veto.Participants.Push(client);
-	return VetoSetById(vetoId, veto);
+    veto.Participants.Push(client);
+    return VetoSetById(vetoId, veto);
 }
 
 // =====[ PRIVATE ]=====
 
 static bool VetoSetById(int id, Veto veto)
 {
-	char szId[16];
-	IntToString(id, szId, sizeof(szId));
-	return VetoMap.SetArray(szId, veto, sizeof(veto));
+    char szId[16];
+    IntToString(id, szId, sizeof(szId));
+    return VetoMap.SetArray(szId, veto, sizeof(veto));
 }
 
 static bool VetoRemove(Veto veto)
 {
-	delete veto.Items;
-	delete veto.Actions;
-	delete veto.Participants;
-	delete veto.RemainingItems;
+    delete veto.Items;
+    delete veto.Actions;
+    delete veto.Participants;
+    delete veto.RemainingItems;
 
-	char szId[16];
-	IntToString(veto.Id, szId, sizeof(szId));
+    char szId[16];
+    IntToString(veto.Id, szId, sizeof(szId));
 
-	return VetoMap.Remove(szId);
+    return VetoMap.Remove(szId);
 }

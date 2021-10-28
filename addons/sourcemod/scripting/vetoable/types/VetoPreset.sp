@@ -1,7 +1,7 @@
 enum struct VetoPreset
 {
-	char Name[128];
+    char Name[128];
 
-	ArrayList Items;
-	ArrayList Actions;
+    ArrayList Items;
+    ArrayList Actions;
 }

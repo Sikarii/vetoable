@@ -1,47 +1,47 @@
 enum struct Veto
 {
-	int Id;
-	int Cursor;
-	bool IsStarted;
+    int Id;
+    int Cursor;
+    bool IsStarted;
 
-	char Name[128];
+    char Name[128];
 
-	ArrayList Items;
-	ArrayList Actions;
-	ArrayList Participants;
-	ArrayList RemainingItems;
+    ArrayList Items;
+    ArrayList Actions;
+    ArrayList Participants;
+    ArrayList RemainingItems;
 
-	int NeededParticipants()
-	{
-		int maxVoterNum = 0;
+    int NeededParticipants()
+    {
+        int maxVoterNum = 0;
 
-		for (int i = 0; i < this.Actions.Length; i++)
-		{
-			VetoAction action;
-			this.Actions.GetArray(i, action);
+        for (int i = 0; i < this.Actions.Length; i++)
+        {
+            VetoAction action;
+            this.Actions.GetArray(i, action);
 
-			if (action.VoterNum > maxVoterNum)
-			{
-				maxVoterNum = action.VoterNum;
-			}
-		}
+            if (action.VoterNum > maxVoterNum)
+            {
+                maxVoterNum = action.VoterNum;
+            }
+        }
 
-		return maxVoterNum;
-	}
+        return maxVoterNum;
+    }
 
-	bool Validate()
-	{
-		if (this.Participants.Length < this.NeededParticipants())
-		{
-			return false;
-		}
+    bool Validate()
+    {
+        if (this.Participants.Length < this.NeededParticipants())
+        {
+            return false;
+        }
 
-		// A veto needs at least as many items as actions
-		if (this.Items.Length < this.Actions.Length)
-		{
-			return false;
-		}
+        // A veto needs at least as many items as actions
+        if (this.Items.Length < this.Actions.Length)
+        {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

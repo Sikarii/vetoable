@@ -15,41 +15,41 @@
 #include "vetoable/api/natives.sp"
 #include "vetoable/api/forwards.sp"
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
-	name = "Vetoable",
-	author = "Sikari",
-	description = "",
-	version = "1.1.2",
-	url = "https://github.com/Sikarii/vetoable"
+    name = "Vetoable",
+    author = "Sikari",
+    description = "",
+    version = "1.1.2",
+    url = "https://github.com/Sikarii/vetoable"
 };
 
 public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	RegPluginLibrary("Vetoable");
+    RegPluginLibrary("Vetoable");
 
-	OnAskPluginLoad2_Natives();
-	OnAskPluginLoad2_Forwards();
+    OnAskPluginLoad2_Natives();
+    OnAskPluginLoad2_Forwards();
 }
 
 public void OnPluginStart()
 {
-	OnPluginStart_Vetos();
-	OnPluginStart_Presets();
-	OnPluginStart_Convars();
-	OnPluginStart_Commands();
+    OnPluginStart_Vetos();
+    OnPluginStart_Presets();
+    OnPluginStart_Convars();
+    OnPluginStart_Commands();
 
-	AutoExecConfig(true, "vetoable");
-	LoadTranslations("common.phrases");
+    AutoExecConfig(true, "vetoable");
+    LoadTranslations("common.phrases");
 
-	TryLoadPresetsFromKeyValues("cfg/sourcemod/vetoable-presets.cfg");
+    TryLoadPresetsFromKeyValues("cfg/sourcemod/vetoable-presets.cfg");
 }
 
 public void OnClientDisconnect(int client)
 {
-	int existingVetoId = GetParticipantExistingVeto(client);
-	if (existingVetoId != -1)
-	{
-		VetoEnd(existingVetoId, VetoEndReason_Abandoned);
-	}
+    int existingVetoId = GetParticipantExistingVeto(client);
+    if (existingVetoId != -1)
+    {
+        VetoEnd(existingVetoId, VetoEndReason_Abandoned);
+    }
 }
