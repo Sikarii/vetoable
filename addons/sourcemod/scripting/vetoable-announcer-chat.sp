@@ -25,7 +25,7 @@ static int FormatAction(VetoableVeto veto, int voter, VetoActionType type, const
 {
 	if (type == VetoActionType_Ban)
 	{
-		return Format(buffer, maxlength, "%N \x07banned\x01 %s", voter, name);
+        return Format(buffer, maxlength, "%N \x07banned\x01 %s", voter, name);
 	}
 
 	if (type == VetoActionType_Pick)
@@ -34,8 +34,10 @@ static int FormatAction(VetoableVeto veto, int voter, VetoActionType type, const
 		{
 			return Format(buffer, maxlength, "%s is the \x09decider\x01", name);
 		}
-
-		return Format(buffer, maxlength, "%N \x04picked\x01 %s", voter, name);
+		else
+		{
+            return Format(buffer, maxlength, "%N \x04picked\x01 %s", voter, name);   
+		}
 	}
 
 	return -1;

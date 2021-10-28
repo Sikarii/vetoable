@@ -6,22 +6,22 @@ static GlobalForward OnVetoEnded;
 
 void OnAskPluginLoad2_Forwards()
 {
-	OnVetoStarted = new GlobalForward("Vetoable_OnVetoStarted",
-										ET_Ignore,
-										Param_Cell);
+	OnVetoStarted = new GlobalForward("Vetoable_OnVetoStarted", 
+		ET_Ignore, 
+		Param_Cell);
 
-	OnVetoAction = new GlobalForward("Vetoable_OnVetoAction",
-										ET_Ignore,
-										Param_Cell,
-										Param_Cell,
-										Param_Cell,
-										Param_String,
-										Param_String);
+	OnVetoAction = new GlobalForward("Vetoable_OnVetoAction", 
+		ET_Ignore, 
+		Param_Cell, 
+		Param_Cell, 
+		Param_Cell, 
+		Param_String, 
+		Param_String);
 
-	OnVetoEnded = new GlobalForward("Vetoable_OnVetoEnded",
-									ET_Ignore,
-									Param_Cell,
-									Param_Cell);
+	OnVetoEnded = new GlobalForward("Vetoable_OnVetoEnded", 
+		ET_Ignore, 
+		Param_Cell, 
+		Param_Cell);
 }
 
 void Call_OnVetoStarted(int vetoId)

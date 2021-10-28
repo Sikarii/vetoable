@@ -27,11 +27,11 @@ public void Vetoable_OnVetoStarted(VetoableVeto veto)
 		<span class='fontSize-l'>%N</span>\
 		<span class='fontSize-xl' color='#FFA500'> vs </span>\
 		<span class='fontSize-l'>%N</span>\
-		<br><br>",
-		panelHtml,
-		veto.Id,
-		name,
-		player1 != -1 ? player1 : 0,
+		<br><br>", 
+		panelHtml, 
+		veto.Id, 
+		name, 
+		player1 != -1 ? player1 : 0, 
 		player2 != -1 ? player2 : 0);
 
 	activeVetoId = veto.Id;
@@ -59,7 +59,7 @@ public Action Timer_HidePanel(Handle timer)
 {
 	if (activeVetoId == 0)
 	{
-		ShowWinPanel("");	
+		ShowWinPanel("");
 	}
 }
 
@@ -80,12 +80,12 @@ static int PushNewResultItem(VetoableVeto veto, int voter, VetoActionType type, 
 	if (type == VetoActionType_Ban)
 	{
 		return Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontSize-m'>%N</span>\
-				<span color='#C80000'> banned </span>\
-				<span class='fontSize-m'>%s</span>",
-				panelHtml,
-				voter,
-				name);
+            <span class='fontSize-m'>%N</span>\
+            <span color='#C80000'> banned </span>\
+            <span class='fontSize-m'>%s</span>", 
+			panelHtml, 
+			voter, 
+			name);
 	}
 
 	if (type == VetoActionType_Pick)
@@ -94,18 +94,20 @@ static int PushNewResultItem(VetoableVeto veto, int voter, VetoActionType type, 
 		{
 			return Format(panelHtml, sizeof(panelHtml), "%s\
 				<span class='fontSize-m'>%s</span> is \
-				the <span color='#C8C800'>decider</span>",
-				panelHtml,
+				the <span color='#C8C800'>decider</span>", 
+				panelHtml, 
 				name);
 		}
-
-		return Format(panelHtml, sizeof(panelHtml), "%s\
-				<span class='fontSize-m'>%N</span>\
-				<span color='#00C800'> picked </span>\
-				<span class='fontSize-m'>%s</span>",
-				panelHtml,
-				voter,
-				name);
+		else
+		{
+            return Format(panelHtml, sizeof(panelHtml), "%s\
+                <span class='fontSize-m'>%N</span>\
+                <span color='#00C800'> picked </span>\
+                <span class='fontSize-m'>%s</span>", 
+                panelHtml, 
+                voter, 
+                name);   
+		}
 	}
 
 	return -1;

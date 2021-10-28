@@ -55,22 +55,22 @@ public int MenuHandler_Voting(Menu menu, MenuAction action, int param1, int para
 		menu.GetItem(0, szId, sizeof(szId));
 
 		int vetoId = StringToInt(szId);
-	
+
 		Veto veto;
 		bool exists = GetVetoById(vetoId, veto);
-	
+
 		if (!exists)
 		{
 			return;
 		}
-	
+
 		VetoAction vetoAction;
 		veto.Actions.GetArray(veto.Cursor, vetoAction);
-	
+
 		// Random selection if user does not interact
 		int itemIndex = action == MenuAction_Select
-			? param2 - 1
-			: GetRandomInt(0, veto.RemainingItems.Length - 1);
+            ? param2 - 1
+            : GetRandomInt(0, veto.RemainingItems.Length - 1);
 
 		VetoProceed(vetoId, itemIndex);
 	}

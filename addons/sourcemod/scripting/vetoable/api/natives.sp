@@ -403,7 +403,7 @@ public int Native_PrintToChat(Handle plugin, int numParams)
 	int client = GetNativeCell(1);
 
 	SetGlobalTransTarget(client);
-	
+
 	char buffer[1024];
 	FormatNativeString(0, 2, 3, sizeof(buffer), _, buffer);
 

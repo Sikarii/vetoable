@@ -15,7 +15,7 @@
 #include "vetoable/api/natives.sp"
 #include "vetoable/api/forwards.sp"
 
-public Plugin myinfo =
+public Plugin myinfo = 
 {
 	name = "Vetoable",
 	author = "Sikari",

@@ -94,8 +94,8 @@ bool VetoProceed(int vetoId, int chosenItemIndex)
 	VetoSetById(vetoId, veto);
 
 	int voter = action.VoterNum == 0
-				? 0
-				: veto.Participants.Get(action.VoterNum - 1);
+        ? 0
+        : veto.Participants.Get(action.VoterNum - 1);
 
 	Call_OnVetoAction(vetoId, voter, action.Type, item.Name, item.Value);
 

@@ -41,7 +41,6 @@ public Action Command_Veto(int client, int args)
 		veto.AddAction(action.Type, action.VoterNum);
 	}
 
-
 	int needed = veto.NeededParticipants;
 
 	int added = Vetoable_AddParticipantsFromArgs(veto, client, needed, 2);
@@ -72,10 +71,10 @@ public Action Command_VetoList(int client, int args)
 		Veto veto;
 		vetos.GetArray(i, veto);
 
-		Vetoable_ReplyToCommand(client, "[#%d] %s - [Started: %s]",
-											veto.Id,
-											veto.Name,
-											veto.IsStarted ? "Yes" : "No");
+		Vetoable_ReplyToCommand(client, "[#%d] %s - [Started: %s]", 
+			veto.Id, 
+			veto.Name, 
+			veto.IsStarted ? "Yes" : "No");
 	}
 
 	delete vetos;
