@@ -22,6 +22,7 @@ enum VetoEndReason
 
 // =====[ CONSTANTS ]=====
 
+#define VETOABLE_VERSION "1.1.2"
 #define VETOABLE_RAW_PREFIX "[VETOABLE]"
 #define VETOABLE_CHAT_PREFIX "[\x0CVETO\x0BABLE\x01]"
 

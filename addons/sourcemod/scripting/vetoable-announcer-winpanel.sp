@@ -1,5 +1,14 @@
 #include <vetoable>
 
+public Plugin myinfo =
+{
+    name = "Vetoable Winpanel Announcer",
+    author = "Sikari",
+    description = "",
+    version = VETOABLE_VERSION,
+    url = "https://github.com/Sikarii/vetoable"
+};
+
 static int activeVetoId;
 static char panelHtml[8192];
 

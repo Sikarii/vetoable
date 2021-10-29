@@ -1,5 +1,14 @@
 #include <vetoable>
 
+public Plugin myinfo =
+{
+    name = "Vetoable Chat Announcer",
+    author = "Sikari",
+    description = "",
+    version = VETOABLE_VERSION,
+    url = "https://github.com/Sikarii/vetoable"
+};
+
 public void Vetoable_OnVetoStarted(VetoableVeto veto)
 {
     char name[128];
