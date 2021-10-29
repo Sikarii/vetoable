@@ -28,20 +28,4 @@ enum struct Veto
 
         return maxVoterNum;
     }
-
-    bool Validate()
-    {
-        if (this.Participants.Length < this.NeededParticipants())
-        {
-            return false;
-        }
-
-        // A veto needs at least as many items as actions
-        if (this.Items.Length < this.Actions.Length)
-        {
-            return false;
-        }
-
-        return true;
-    }
 }

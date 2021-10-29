@@ -23,14 +23,14 @@ public Action Command_Veto(int client, int args)
         return Plugin_Handled;
     }
 
-    VetoableVeto veto = VetoableVeto(preset.Name);
+    int vetoId = VetoCreate(preset.Name);
 
     for (int i = 0; i < preset.Items.Length; i++)
     {
         VetoItem item;
         preset.Items.GetArray(i, item);
 
-        veto.AddItem(item.Name, item.Value);
+        VetoAddItem(vetoId, item.Name, item.Value);
     }
 
     for (int i = 0; i < preset.Actions.Length; i++)
@@ -38,25 +38,19 @@ public Action Command_Veto(int client, int args)
         VetoAction action;
         preset.Actions.GetArray(i, action);
 
-        veto.AddAction(action.Type, action.VoterNum);
+        VetoAddAction(vetoId, action.Type, action.VoterNum);
     }
 
-    int needed = veto.NeededParticipants;
-
-    int added = Vetoable_AddParticipantsFromArgs(veto, client, needed, 2);
-    if (added < needed)
+    VetoStartResult result = VetoStart(vetoId);
+    if (result != VetoStartResult_Ok)
     {
-        Vetoable_ReplyToCommand(client, "%d participants are needed", needed);
-    }
+        Vetoable_ReplyToCommand(client, "Failed to start veto: '%s'", VetoStartResultPhrases[result]);
 
-    bool started = veto.Start();
-    if (!started)
-    {
-        Vetoable_ReplyToCommand(client, "Failed to start veto");
+        VetoEnd(vetoId, VetoEndReason_Finished);
         return Plugin_Handled;
     }
 
-    Vetoable_ReplyToCommand(client, "Started veto %d", veto.Id);
+    Vetoable_ReplyToCommand(client, "Started veto %d", vetoId);
     return Plugin_Handled;
 }
 

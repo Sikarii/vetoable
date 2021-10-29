@@ -20,6 +20,15 @@ enum VetoEndReason
     VetoEndReason_COUNT,
 };
 
+enum VetoStartResult
+{
+    VetoStartResult_Ok = 0,
+    VetoStartResult_GenericError,
+    VetoStartResult_InsufficientItems,
+    VetoStartResult_InsufficientParticipants,
+    VetoStartResult_COUNT,
+};
+
 // =====[ CONSTANTS ]=====
 
 #define VETOABLE_VERSION "1.1.2"
@@ -37,6 +46,14 @@ stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] =
     "canceled",
     "finished",
     "abandoned",
+};
+
+stock char VetoStartResultPhrases[VetoStartResult_COUNT][] =
+{
+    "success",
+    "generic error",
+    "insufficient items",
+    "insufficient participants",
 };
 
 // =====[ METHODMAP ]=====
@@ -250,7 +267,7 @@ methodmap VetoableVeto
      * @param autoDispose   Whether to remove veto on failure.
      * @return              Whether the veto was started successfully.
      */
-    public native bool Start(bool autoDispose = true);
+    public native bool Start(bool autoDispose = true, VetoStartResult &result = VetoStartResult_Ok);
 
     /**
      * Cancels the veto.

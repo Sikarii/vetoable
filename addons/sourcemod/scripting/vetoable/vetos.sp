@@ -25,20 +25,26 @@ int VetoCreate(char name[sizeof(Veto::Name)])
     return veto.Id;
 }
 
-bool VetoStart(int vetoId)
+VetoStartResult VetoStart(int vetoId)
 {
     Veto veto;
     bool exists = GetVetoById(vetoId, veto);
 
     if (!exists || veto.IsStarted)
     {
-        return false;
+        return VetoStartResult_GenericError;
     }
 
-    bool valid = veto.Validate();
-    if (!valid)
+    // A veto needs at least as many items as actions
+    if (veto.Items.Length < veto.Actions.Length)
     {
-        return false;
+        return VetoStartResult_InsufficientItems;
+    }
+
+    // Not enough participants
+    if (veto.Participants.Length < veto.NeededParticipants())
+    {
+        return VetoStartResult_InsufficientParticipants;
     }
 
     veto.IsStarted = true;
@@ -47,7 +53,8 @@ bool VetoStart(int vetoId)
     VetoSetById(vetoId, veto);
     Call_OnVetoStarted(vetoId);
 
-    return AskForInput(veto);
+    AskForInput(veto);
+    return VetoStartResult_Ok;
 }
 
 bool VetoEnd(int vetoId, VetoEndReason reason)
@@ -94,8 +101,8 @@ bool VetoProceed(int vetoId, int chosenItemIndex)
     VetoSetById(vetoId, veto);
 
     int voter = action.VoterNum == 0
-     ? 0
-     : veto.Participants.Get(action.VoterNum - 1);
+        ? 0
+        : veto.Participants.Get(action.VoterNum - 1);
 
     Call_OnVetoAction(vetoId, voter, action.Type, item.Name, item.Value);
 
@@ -169,15 +176,14 @@ bool VetoAddItem(int vetoId, char name[sizeof(VetoItem::Name)], char value[sizeo
         return false;
     }
 
-    VetoItem item;
-    item.Name = name;
-    item.Value = value;
-
-    bool valid = item.Validate();
-    if (!valid)
+    if (StrEqual(name, ""))
     {
         return false;
     }
+
+    VetoItem item;
+    item.Name = name;
+    item.Value = value;
 
     // Fill value with name if not set
     if (StrEqual(item.Value, ""))
@@ -199,15 +205,14 @@ bool VetoAddAction(int vetoId, VetoActionType type, int voterNum)
         return false;
     }
 
-    VetoAction action;
-    action.Type = type;
-    action.VoterNum = voterNum;
-
-    bool valid = action.Validate();
-    if (!valid)
+    if (voterNum < 0)
     {
         return false;
     }
+
+    VetoAction action;
+    action.Type = type;
+    action.VoterNum = voterNum;
 
     veto.Actions.PushArray(action);
     return VetoSetById(vetoId, veto);

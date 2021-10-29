@@ -46,14 +46,15 @@ public int Native_StartVeto(Handle plugin, int numParams)
     int vetoId = GetNativeCell(1);
     bool disposeOnFailure = GetNativeCell(2);
 
-    bool success = VetoStart(vetoId);
-    if (!success && disposeOnFailure)
+    VetoStartResult result = VetoStart(vetoId);
+    if (result != VetoStartResult_Ok && disposeOnFailure)
     {
         // Global end forward is not called
         VetoEnd(vetoId, VetoEndReason_Finished);
     }
 
-    return success;
+    SetNativeCellRef(3, result);
+    return result == VetoStartResult_Ok;
 }
 
 public int Native_CancelVeto(Handle plugin, int numParams)
