@@ -265,6 +265,7 @@ methodmap VetoableVeto
      * Starts the veto.
      *
      * @param autoDispose   Whether to remove veto on failure.
+     * @param result        By-ref result of the start operation.
      * @return              Whether the veto was started successfully.
      */
     public native bool Start(bool autoDispose = true, VetoStartResult &result = VetoStartResult_Ok);
