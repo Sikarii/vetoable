@@ -231,7 +231,7 @@ bool VetoAddItem(int vetoId, char name[sizeof(VetoItem::Name)], char value[sizeo
     Veto veto;
     bool exists = GetVetoById(vetoId, veto);
 
-    if (!exists || veto.IsStarted)
+    if (!exists)
     {
         return false;
     }
@@ -252,6 +252,13 @@ bool VetoAddItem(int vetoId, char name[sizeof(VetoItem::Name)], char value[sizeo
     }
 
     veto.Items.PushArray(item);
+
+    // Add to remaining if started already
+    if (veto.IsStarted)
+    {
+        veto.RemainingItems.PushArray(item);
+    }
+
     return VetoSetById(vetoId, veto);
 }
 
