@@ -35,13 +35,13 @@ enum VetoStartResult
 #define VETOABLE_RAW_PREFIX "[VETOABLE]"
 #define VETOABLE_CHAT_PREFIX "[\x0CVETO\x0BABLE\x01]"
 
-stock char VetoActionPhrases[VetoActionType_COUNT][] = 
+stock char VetoActionPhrases[VetoActionType_COUNT][] =
 {
     "pick",
     "ban",
 };
 
-stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] = 
+stock char VetoEndReasonPhrases[VetoEndReason_COUNT][] =
 {
     "canceled",
     "finished",
@@ -425,14 +425,14 @@ forward void Vetoable_OnVetoEnded(VetoableVeto veto, VetoEndReason reason);
 
 // =====[ DEPENDENCY ]=====
 
-public SharedPlugin __pl_Vetoable = 
+public SharedPlugin __pl_Vetoable =
 {
-    name = "Vetoable", 
-    file = "vetoable.smx", 
+    name = "Vetoable",
+    file = "vetoable.smx",
     #if defined REQUIRE_PLUGIN
-    required = 1, 
+    required = 1,
     #else
-    required = 0, 
+    required = 0,
     #endif
 };
 

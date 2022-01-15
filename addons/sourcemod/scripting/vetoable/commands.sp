@@ -72,9 +72,9 @@ public Action Command_VetoList(int client, int args)
         Veto veto;
         vetos.GetArray(i, veto);
 
-        Vetoable_ReplyToCommand(client, "[#%d] %s - [Started: %s]", 
-            veto.Id, 
-            veto.Name, 
+        Vetoable_ReplyToCommand(client, "[#%d] %s - [Started: %s]",
+            veto.Id,
+            veto.Name,
             veto.IsStarted ? "Yes" : "No");
     }
 
