@@ -267,7 +267,7 @@ bool VetoAddAction(int vetoId, VetoActionType type, int voterNum)
     Veto veto;
     bool exists = GetVetoById(vetoId, veto);
 
-    if (!exists || veto.IsStarted)
+    if (!exists)
     {
         return false;
     }
@@ -275,6 +275,20 @@ bool VetoAddAction(int vetoId, VetoActionType type, int voterNum)
     if (voterNum < 0)
     {
         return false;
+    }
+
+    if (veto.IsStarted)
+    {
+        if (veto.Items.Length < veto.Actions.Length + 1)
+        {
+            return false;
+        }
+
+        int neededParticipants = GetVetoNeededParticipants(vetoId);
+        if (voterNum > neededParticipants)
+        {
+            return false;
+        }
     }
 
     VetoAction action;
