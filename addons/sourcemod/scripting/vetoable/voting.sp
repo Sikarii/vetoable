@@ -12,6 +12,10 @@ bool AskForInput(Veto veto)
     }
 
     int voter = veto.Participants.Get(action.VoterNum - 1);
+    if (veto.RemainingItems.Length == 1)
+    {
+        return VetoProceed(veto.Id, 0);
+    }
 
     ShowVoterMenu(veto, voter, action.Type);
     return true;
