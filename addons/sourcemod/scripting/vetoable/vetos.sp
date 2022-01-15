@@ -1,3 +1,37 @@
+enum struct Veto
+{
+    int Id;
+    int Cursor;
+    bool IsStarted;
+
+    char Name[128];
+
+    ArrayList Items;
+    ArrayList Actions;
+    ArrayList Participants;
+    ArrayList RemainingItems;
+}
+
+enum struct VetoAction
+{
+    int VoterNum;
+    VetoActionType Type;
+}
+
+enum struct VetoItem
+{
+    char Name[128];
+    char Value[128];
+}
+
+enum struct VetoPreset
+{
+    char Name[128];
+
+    ArrayList Items;
+    ArrayList Actions;
+}
+
 static int UniqueId = 1;
 static StringMap VetoMap = null;
 
@@ -41,8 +75,8 @@ VetoStartResult VetoStart(int vetoId)
         return VetoStartResult_InsufficientItems;
     }
 
-    // Not enough participants
-    if (veto.Participants.Length < veto.NeededParticipants())
+    int neededParticipants = GetVetoNeededParticipants(vetoId);
+    if (veto.Participants.Length < neededParticipants)
     {
         return VetoStartResult_InsufficientParticipants;
     }
@@ -144,6 +178,32 @@ bool GetVetoById(int id, Veto veto)
     char key[16];
     IntToString(id, key, sizeof(key));
     return VetoMap.GetArray(key, veto, sizeof(veto));
+}
+
+int GetVetoNeededParticipants(int vetoId)
+{
+    Veto veto;
+    bool exists = GetVetoById(vetoId, veto);
+
+    if (!exists)
+    {
+        return -1;
+    }
+
+    int maxVoterNum = 0;
+
+    for (int i = 0; i < veto.Actions.Length; i++)
+    {
+        VetoAction action;
+        veto.Actions.GetArray(i, action);
+
+        if (action.VoterNum > maxVoterNum)
+        {
+            maxVoterNum = action.VoterNum;
+        }
+    }
+
+    return maxVoterNum;
 }
 
 int GetParticipantExistingVeto(int client)

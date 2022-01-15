@@ -41,6 +41,13 @@ public Action Command_Veto(int client, int args)
         VetoAddAction(vetoId, action.Type, action.VoterNum);
     }
 
+    int neededParticipants = GetVetoNeededParticipants(vetoId);
+    if (neededParticipants > 0)
+    {
+        VetoableVeto vetoableVeto = VetoableVeto.FromId(vetoId);
+        Vetoable_AddParticipantsFromArgs(vetoableVeto, client, neededParticipants, 2);
+    }
+
     VetoStartResult result = VetoStart(vetoId);
     if (result != VetoStartResult_Ok)
     {

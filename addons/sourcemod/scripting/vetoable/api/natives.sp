@@ -203,16 +203,7 @@ public int Native_GetVetoRemainingItemCount(Handle plugin, int numParams)
 public int Native_GetVetoNeededParticipants(Handle plugin, int numParams)
 {
     int vetoId = GetNativeCell(1);
-
-    Veto veto;
-
-    bool exists = GetVetoById(vetoId, veto);
-    if (!exists)
-    {
-        return -1;
-    }
-
-    return veto.NeededParticipants();
+    return GetVetoNeededParticipants(vetoId);
 }
 
 public int Native_GetVetoItemName(Handle plugin, int numParams)

@@ -1,14 +1,9 @@
 #include <vetoable>
 
-#include "vetoable/types/VetoItem.sp"
-#include "vetoable/types/VetoAction.sp"
-#include "vetoable/types/VetoPreset.sp"
-#include "vetoable/types/Veto.sp"
-
+#include "vetoable/vetos.sp"
 #include "vetoable/convars.sp"
 #include "vetoable/commands.sp"
 
-#include "vetoable/vetos.sp"
 #include "vetoable/voting.sp"
 #include "vetoable/presets.sp"
 
